@@ -1,133 +1,13 @@
 import Image from "next/image";
 import { Inter } from "next/font/google";
-import { Payment, columns } from "~/components/ui/columns";
+import { columns } from "~/components/ui/columns";
 import { DataTable } from "~/components/ui/data-table";
+import { generateTestTableData } from "~/utils/DataGenerator";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-	const data: Payment[] = [
-		{
-			id: "728ed52f",
-			amount: 100,
-			status: "pending",
-			email: "m@example.com",
-		},
-		{
-			id: "728ed52f",
-			amount: 100,
-			status: "processing",
-			email: "m@example.com",
-		},
-		{
-			id: "728ed52f",
-			amount: 100,
-			status: "processing",
-			email: "m@example.com",
-		},
-		{
-			id: "728ed52f",
-			amount: 100,
-			status: "processing",
-			email: "m@example.com",
-		},
-		{
-			id: "728ed52f",
-			amount: 100,
-			status: "processing",
-			email: "m@example.com",
-		},
-		{
-			id: "728ed52f",
-			amount: 100,
-			status: "pending",
-			email: "m@example.com",
-		},
-		{
-			id: "728ed52f",
-			amount: 100,
-			status: "processing",
-			email: "m@example.com",
-		},
-		{
-			id: "728ed52f",
-			amount: 100,
-			status: "processing",
-			email: "m@example.com",
-		},
-		{
-			id: "728ed52f",
-			amount: 100,
-			status: "processing",
-			email: "m@example.com",
-		},
-		{
-			id: "728ed52f",
-			amount: 100,
-			status: "processing",
-			email: "m@example.com",
-		},
-		{
-			id: "728ed52f",
-			amount: 100,
-			status: "pending",
-			email: "m@example.com",
-		},
-		{
-			id: "728ed52f",
-			amount: 100,
-			status: "processing",
-			email: "m@example.com",
-		},
-		{
-			id: "728ed52f",
-			amount: 100,
-			status: "processing",
-			email: "m@example.com",
-		},
-		{
-			id: "728ed52f",
-			amount: 100,
-			status: "processing",
-			email: "m@example.com",
-		},
-		{
-			id: "728ed52f",
-			amount: 100,
-			status: "processing",
-			email: "m@example.com",
-		},
-		{
-			id: "728ed52f",
-			amount: 100,
-			status: "pending",
-			email: "m@example.com",
-		},
-		{
-			id: "728ed52f",
-			amount: 100,
-			status: "processing",
-			email: "m@example.com",
-		},
-		{
-			id: "728ed52f",
-			amount: 100,
-			status: "processing",
-			email: "m@example.com",
-		},
-		{
-			id: "728ed52f",
-			amount: 100,
-			status: "processing",
-			email: "m@example.com",
-		},
-		{
-			id: "728ed52f",
-			amount: 100,
-			status: "processing",
-			email: "m@example.com",
-		},
-	];
+	const data = generateTestTableData(100);
 
 	return (
 		<main

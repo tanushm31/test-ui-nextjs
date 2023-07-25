@@ -9,17 +9,17 @@ import {
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-
+import { type Record } from "~/utils/DataGenerator";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Payment = {
-	id: string;
-	amount: number;
-	status: "pending" | "processing" | "success" | "failed";
-	email: string;
-};
+// export type Payment = {
+// 	id: string;
+// 	amount: number;
+// 	status: "pending" | "processing" | "success" | "failed";
+// 	email: string;
+// };
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<Record>[] = [
 	{
 		id: "actions",
 		cell: ({ row }) => {
