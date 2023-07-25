@@ -4,6 +4,33 @@ import {
 	getCoreRowModel,
 	useReactTable,
 } from "@tanstack/react-table";
+
+// import {
+//     Column,
+//     Table,
+//     useReactTable,
+//     ColumnFiltersState,
+//     getCoreRowModel,
+//     getFilteredRowModel,
+//     getFacetedRowModel,
+//     getFacetedUniqueValues,
+//     getFacetedMinMaxValues,
+//     getPaginationRowModel,
+//     sortingFns,
+//     getSortedRowModel,
+//     FilterFn,
+//     SortingFn,
+//     ColumnDef,
+//     flexRender,
+//     FilterFns,
+//   } from '@tanstack/react-table'
+
+import {
+	RankingInfo,
+	rankItem,
+	compareItems,
+} from "@tanstack/match-sorter-utils";
+
 import React, { useState } from "react";
 
 type Person = {
@@ -48,31 +75,34 @@ const TableComponent: React.FC<ITableProps> = (props) => {
 	const columnHelper = createColumnHelper<Person>();
 	const columns = [
 		columnHelper.accessor("firstName", {
-			cell: (info) => info.getValue(),
-			footer: (info) => info.column.id,
+			header: () => <span>First Name</span>,
+			cell: (item) => item.getValue(),
+			footer: (item) => item.column.id,
 		}),
 		columnHelper.accessor((row) => row.lastName, {
 			id: "lastName",
-			cell: (info) => <i>{info.getValue()}</i>,
+			cell: (item) => (
+				<span className="capitalize">{item.getValue()}</span>
+			),
 			header: () => <span>Last Name</span>,
-			footer: (info) => info.column.id,
+			footer: (item) => item.column.id,
 		}),
 		columnHelper.accessor("age", {
 			header: () => "Age",
-			cell: (info) => info.renderValue(),
-			footer: (info) => info.column.id,
+			cell: (item) => item.renderValue(),
+			footer: (item) => item.column.id,
 		}),
 		columnHelper.accessor("visits", {
 			header: () => <span>Visits</span>,
-			footer: (info) => info.column.id,
+			footer: (item) => item.column.id,
 		}),
 		columnHelper.accessor("status", {
 			header: "Status",
-			footer: (info) => info.column.id,
+			footer: (item) => item.column.id,
 		}),
 		columnHelper.accessor("progress", {
 			header: "Profile Progress",
-			footer: (info) => info.column.id,
+			footer: (item) => item.column.id,
 		}),
 	];
 	const table = useReactTable({
@@ -82,18 +112,18 @@ const TableComponent: React.FC<ITableProps> = (props) => {
 	});
 
 	return (
-		<div>
+		<div className="bg-white p-5 text-black">
 			<table>
-				<thead>
+				<thead className="bg-gray-300">
 					{table.getHeaderGroups().map((headerGroup) => (
 						<tr key={headerGroup.id}>
 							{headerGroup.headers.map((header) => (
-								<th key={header.id}>
+								<th className="px-10" key={header.id}>
 									{header.isPlaceholder
 										? null
 										: flexRender(
 												header.column.columnDef.header,
-												header.getContext()
+												header.getContext() // This getContext helps us set up the properties like filtering, sorting, etc.
 										  )}
 								</th>
 							))}
@@ -104,7 +134,10 @@ const TableComponent: React.FC<ITableProps> = (props) => {
 					{table.getRowModel().rows.map((row) => (
 						<tr key={row.id}>
 							{row.getVisibleCells().map((cell) => (
-								<td key={cell.id}>
+								<td
+									className="px-3 border-2 border-black"
+									key={cell.id}
+								>
 									{flexRender(
 										cell.column.columnDef.cell,
 										cell.getContext()
