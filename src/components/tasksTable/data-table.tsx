@@ -2,6 +2,7 @@ import * as React from "react";
 import {
 	ColumnDef,
 	ColumnFiltersState,
+	ColumnResizeMode,
 	SortingState,
 	VisibilityState,
 	flexRender,
@@ -40,6 +41,9 @@ export default function DataTableTasks<TData, TValue>({
 		React.useState<VisibilityState>({});
 	const [columnFilters, setColumnFilters] =
 		React.useState<ColumnFiltersState>([]);
+	const [columnResizeMode, setColumnResizeMode] =
+		React.useState<ColumnResizeMode>("onChange");
+
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 
 	const table = useReactTable({
@@ -49,9 +53,13 @@ export default function DataTableTasks<TData, TValue>({
 			sorting,
 			columnVisibility,
 			rowSelection,
+			// columnSizing: { mode: columnResizeMode },
 			columnFilters,
 		},
 		enableRowSelection: true,
+		columnResizeMode: columnResizeMode,
+		enableColumnResizing: true,
+		// enableResizing: true,
 		onRowSelectionChange: setRowSelection,
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
@@ -68,13 +76,27 @@ export default function DataTableTasks<TData, TValue>({
 		<div className="space-y-4">
 			<DataTableToolbar table={table} />
 			<div className="rounded-md border">
-				<Table>
+				<Table
+					{...{
+						style: {
+							width: table.getCenterTotalSize(),
+						},
+					}}
+				>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
 							<TableRow key={headerGroup.id}>
 								{headerGroup.headers.map((header) => {
 									return (
-										<TableHead key={header.id}>
+										<TableHead
+											className="border-2 border-gray-400"
+											{...{
+												style: {
+													width: header.getSize(),
+												},
+											}}
+											key={header.id}
+										>
 											{header.isPlaceholder
 												? null
 												: flexRender(
@@ -82,6 +104,31 @@ export default function DataTableTasks<TData, TValue>({
 															.header,
 														header.getContext()
 												  )}
+											<div
+												{...{
+													onMouseDown:
+														header.getResizeHandler(),
+													onTouchStart:
+														header.getResizeHandler(),
+													className: `resizer ${
+														header.column.getIsResizing()
+															? "isResizing"
+															: ""
+													}`,
+													style: {
+														transform:
+															columnResizeMode ===
+																"onEnd" &&
+															header.column.getIsResizing()
+																? `translateX(${
+																		table.getState()
+																			.columnSizingInfo
+																			.deltaOffset
+																  }px)`
+																: "",
+													},
+												}}
+											/>
 										</TableHead>
 									);
 								})}
@@ -98,7 +145,14 @@ export default function DataTableTasks<TData, TValue>({
 									}
 								>
 									{row.getVisibleCells().map((cell) => (
-										<TableCell key={cell.id}>
+										<TableCell
+											{...{
+												style: {
+													width: cell.column.getSize(),
+												},
+											}}
+											key={cell.id}
+										>
 											{flexRender(
 												cell.column.columnDef.cell,
 												cell.getContext()
@@ -110,6 +164,7 @@ export default function DataTableTasks<TData, TValue>({
 						) : (
 							<TableRow>
 								<TableCell
+									style={{}}
 									colSpan={columns.length}
 									className="h-24 text-center"
 								>
