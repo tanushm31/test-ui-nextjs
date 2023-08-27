@@ -24,15 +24,14 @@ export const columns: ColumnDef<Task>[] = [
 		cell: ({ row }) => (
 			<Checkbox
 				checked={row.getIsSelected()}
-				onCheckedChange={(value: unknown) =>
-					row.toggleSelected(!!value)
-				}
+				onCheckedChange={(value: unknown) => row.toggleSelected(!!value)}
 				aria-label="Select row"
 				className="translate-y-[2px]"
 			/>
 		),
 		enableSorting: false,
 		enableHiding: false,
+		enableGrouping: false,
 	},
 	{
 		accessorKey: "id",
@@ -45,13 +44,12 @@ export const columns: ColumnDef<Task>[] = [
 	},
 	{
 		accessorKey: "title",
+		aggregationFn: "uniqueCount",
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title="Title" />
 		),
 		cell: ({ row }) => {
-			const label = labels.find(
-				(label) => label.value === row.original.label
-			);
+			const label = labels.find((label) => label.value === row.original.label);
 
 			return (
 				<div className="flex space-x-2">
